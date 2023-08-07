@@ -165,6 +165,13 @@ int main(int argc, char** argv)
 	int uniformLocation = glGetUniformLocation(ShaderObject.ID, "ourTexture");
 	glUniform1i(uniformLocation, 0);*/
 
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::mat4 transformation = glm::mat4(1.0f);
+
+	transformation = glm::translate(transformation, glm::vec3(1.0f, 1.0f, 0.0f));
+	vec = transformation * vec;
+	std::cout << vec.x << ', ' << vec.y << ',' << vec.z << ',' << vec.w << '\n';
+
 	while (!glfwWindowShouldClose(window))
 	{	
 		// Input
