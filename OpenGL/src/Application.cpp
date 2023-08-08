@@ -51,12 +51,52 @@ int main(int argc, char** argv)
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	//Creating and binding vertices
-	float vertices[32] = {	
-	// positions          // colors           // texture coords
-	  0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,		// top right
-	  0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,		// bottom right
-	 -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,		// bottom left
-	 -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f		// top left
+	float vertices[180] = {
+	/* Positions
+	   (for 
+	   verticies 
+	   for a cube) */	  // Texture coords
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
 	unsigned int indices[6] = {
@@ -90,16 +130,12 @@ int main(int argc, char** argv)
 
 	// Telling openGL how to interpret the vertex data
 	// Position Attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	// Color Attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
 	// Texture Attribute
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	stbi_set_flip_vertically_on_load(true);
 
@@ -141,7 +177,7 @@ int main(int argc, char** argv)
 
 	// Load awesome face texture
 	int width1, height1, nrChannels1;
-	unsigned char* data1 = stbi_load("res/textures/awesomeface.png", &width1, &height1, &nrChannels1, 4);
+	unsigned char* data1 = stbi_load("res/textures/sotrue.jpg", &width1, &height1, &nrChannels1, 4);
 	if (data1)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width1, height1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data1);
@@ -160,17 +196,12 @@ int main(int argc, char** argv)
 	glUniform1i(glGetUniformLocation(ShaderObject.ID, "texture1"), 0);
 	glUniform1i(glGetUniformLocation(ShaderObject.ID, "texture2"), 1);
 	glUniform1f(glGetUniformLocation(ShaderObject.ID, "transparency"), transparent_factor);
+	
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
 
-	/*ShaderObject.use();
-	int uniformLocation = glGetUniformLocation(ShaderObject.ID, "ourTexture");
-	glUniform1i(uniformLocation, 0);*/
-
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	glm::mat4 transformation = glm::mat4(1.0f);
-
-	transformation = glm::translate(transformation, glm::vec3(1.0f, 1.0f, 0.0f));
-	vec = transformation * vec;
-	std::cout << vec.x << ', ' << vec.y << ',' << vec.z << ',' << vec.w << '\n';
+	glEnable(GL_DEPTH_TEST);
 
 	while (!glfwWindowShouldClose(window))
 	{	
@@ -180,17 +211,18 @@ int main(int argc, char** argv)
 		// Rendering commands
 		glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) && (transparent_factor <= 1.0))
 		{
 			std::cout << "up arrow" << '\n';
-			transparent_factor += 0.05;
+			transparent_factor += 0.05f;
 		}
 		
 		if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) && (transparent_factor >= 0.0))
 		{
 			std::cout << "down arrow: " << transparent_factor << '\n';
-			transparent_factor -= 0.05;
+			transparent_factor -= 0.05f;
 		}
 
 		glActiveTexture(GL_TEXTURE0);
@@ -198,11 +230,27 @@ int main(int argc, char** argv)
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		glUniform1f(glGetUniformLocation(ShaderObject.ID, "transparency"), transparent_factor);
+		model = glm::mat4(1.0f);
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 
-		glBindVertexArray(VAO);
+		view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+		projection = glm::mat4(1.0f);
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+		glm::mat4 final_matrix = projection * view * model;
+
+		unsigned int transformLoc = glGetUniformLocation(ShaderObject.ID, "transformation");
+
+		glUniform1f(glGetUniformLocation(ShaderObject.ID, "transparency"), transparent_factor);
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(final_matrix));
+
+		// glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		ShaderObject.use();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Check and call events and swap buffers
 		glfwSwapBuffers(window);
