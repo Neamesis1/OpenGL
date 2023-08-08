@@ -565,6 +565,8 @@
     <None Include="res\shaders\Fragment.shader" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\textures\awesomeface.png" />
+    <Image Include="res\textures\good_container.JPG" />
     <Image Include="res\textures\sotrue.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
