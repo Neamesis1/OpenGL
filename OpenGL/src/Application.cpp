@@ -201,7 +201,25 @@ int main(int argc, char** argv)
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
 
+	glm::vec3 cubePositions[10] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	glEnable(GL_DEPTH_TEST);
+
+	float move_var = 0.01f;
+	float camera_x = 0.0f;
+	float camera_y = 0.0f;
+	float camera_z = -4.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{	
@@ -213,7 +231,7 @@ int main(int argc, char** argv)
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) && (transparent_factor <= 1.0))
+		/*if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) && (transparent_factor <= 1.0))
 		{
 			std::cout << "up arrow" << '\n';
 			transparent_factor += 0.05f;
@@ -223,7 +241,7 @@ int main(int argc, char** argv)
 		{
 			std::cout << "down arrow: " << transparent_factor << '\n';
 			transparent_factor -= 0.05f;
-		}
+		}*/
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
@@ -233,8 +251,25 @@ int main(int argc, char** argv)
 		model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		{
+			camera_x += move_var;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		{
+			camera_x -= move_var;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		{
+			camera_y -= move_var;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		{
+			camera_y += move_var;
+		}
+
 		view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		view = glm::translate(view, glm::vec3(camera_x, camera_y, -4.0f));
 
 		projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -244,13 +279,29 @@ int main(int argc, char** argv)
 		unsigned int transformLoc = glGetUniformLocation(ShaderObject.ID, "transformation");
 
 		glUniform1f(glGetUniformLocation(ShaderObject.ID, "transparency"), transparent_factor);
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(final_matrix));
 
-		// glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBindVertexArray(VAO);
 		ShaderObject.use();
-		// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			model = glm::mat4(1.0f);
+			view = glm::translate(view, cubePositions[i]);
+
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			glm::mat4 final_matrix = projection * view * model;
+
+			if (i % 3 == 0)
+			{
+
+			}
+
+			glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(final_matrix));
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		
 
 		// Check and call events and swap buffers
 		glfwSwapBuffers(window);
