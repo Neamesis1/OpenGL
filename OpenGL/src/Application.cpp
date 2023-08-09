@@ -1,13 +1,18 @@
 #include <iostream>
+#include <filesystem>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Shader.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include <filesystem>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Shader.h"
+#include "Camera.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -246,9 +251,10 @@ int main(int argc, char** argv)
 	glm::vec3 cameraRight = glm::normalize(glm::cross(worldSpaceUp, cameraDirection));
 	glm::vec3 cameraUp = glm::normalize(glm::cross(cameraDirection, cameraRight));
 
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	Camera CameraObject(cameraPos);
+	Camera_Movement direction;
 
-	float cameraSpeed = 0.35;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	while (!glfwWindowShouldClose(window))
 	{	
@@ -282,16 +288,18 @@ int main(int argc, char** argv)
 
 		camera_move(window, cameraPos, cameraFront, cameraUp, cameraSpeed);
 
+		glfwSetCursorPosCallback(window, mouse_callback);
+		glfwSetScrollCallback(window, scroll_callback);
+
 		view = glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, worldSpaceUp);
 
 		projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
 
 		glm::mat4 final_matrix = projection * view * model;
 
 		unsigned int transformLoc = glGetUniformLocation(ShaderObject.ID, "transformation");
-
 		glUniform1f(glGetUniformLocation(ShaderObject.ID, "transparency"), transparent_factor);
 
 		glBindVertexArray(VAO);
