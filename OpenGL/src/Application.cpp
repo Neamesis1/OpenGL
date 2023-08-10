@@ -29,25 +29,67 @@ void process_input(GLFWwindow* window)
 	}
 }
 
+float lastX = 400, lastY = 300;
+bool firstMouse = true;
+float cameraSpeed = CAMERA_SPEED;
 
-void camera_move(GLFWwindow* window, glm::vec3& cameraPos, glm::vec3& cameraFront, glm::vec3& cameraUp, float cameraSpeed)
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+
+glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+
+glm::vec3 worldSpaceUp = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 cameraRight = glm::normalize(glm::cross(worldSpaceUp, cameraDirection));
+glm::vec3 cameraUp = glm::normalize(glm::cross(cameraDirection, cameraRight));
+
+Camera CameraObject(cameraPos, worldSpaceUp);
+Camera_Movement direction;
+
+void camera_move(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		cameraPos += cameraSpeed * cameraFront;
+		CameraObject.ProcessKeyboard(FORWARD, 0.05f);
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		cameraPos -= cameraSpeed * cameraFront;
+		CameraObject.ProcessKeyboard(BACKWARD, 0.05f);
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		CameraObject.ProcessKeyboard(LEFT, 0.05f);
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		CameraObject.ProcessKeyboard(RIGHT, 0.05f);
 	}
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+	std::cout << "mouse call" << '\n';
+	float xpos = (float)xposIn;
+	float ypos = (float)yposIn;
+
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xOffset = xpos - lastX;
+	float yOffset = lastY - ypos;
+
+	CameraObject.ProcessMouse(xOffset, yOffset);
+
+}
+
+
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
+{
+	CameraObject.ProcessMouseScroll((float)yOffset);
 }
 
 
@@ -216,7 +258,7 @@ int main(int argc, char** argv)
 	}
 	stbi_image_free(data1);
 
-	float transparent_factor = 0.35;
+	float transparent_factor = 0.35f;
 
 	ShaderObject.use();
 	glUniform1i(glGetUniformLocation(ShaderObject.ID, "texture1"), 0);
@@ -241,18 +283,6 @@ int main(int argc, char** argv)
 	};
 
 	glEnable(GL_DEPTH_TEST);
-
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-
-	glm::vec3 worldSpaceUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 cameraRight = glm::normalize(glm::cross(worldSpaceUp, cameraDirection));
-	glm::vec3 cameraUp = glm::normalize(glm::cross(cameraDirection, cameraRight));
-
-	Camera CameraObject(cameraPos);
-	Camera_Movement direction;
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -286,16 +316,16 @@ int main(int argc, char** argv)
 		model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 
-		camera_move(window, cameraPos, cameraFront, cameraUp, cameraSpeed);
-
+		camera_move(window);
+		
 		glfwSetCursorPosCallback(window, mouse_callback);
 		glfwSetScrollCallback(window, scroll_callback);
 
 		view = glm::mat4(1.0f);
-		view = glm::lookAt(cameraPos, cameraPos + cameraFront, worldSpaceUp);
+		view = CameraObject.GetViewMatrix();
 
 		projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(CameraObject.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
 
 		glm::mat4 final_matrix = projection * view * model;
 
