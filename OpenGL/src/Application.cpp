@@ -33,6 +33,10 @@ float lastX = 400, lastY = 300;
 bool firstMouse = true;
 float cameraSpeed = CAMERA_SPEED;
 
+// timing
+float dT = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 
 glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -46,29 +50,28 @@ glm::vec3 cameraUp = glm::normalize(glm::cross(cameraDirection, cameraRight));
 Camera CameraObject(cameraPos, worldSpaceUp);
 Camera_Movement direction;
 
-void camera_move(GLFWwindow* window)
+void camera_move(GLFWwindow* window, float deltaTime)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		CameraObject.ProcessKeyboard(FORWARD, 0.05f);
+		CameraObject.ProcessKeyboard(FORWARD, deltaTime);
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		CameraObject.ProcessKeyboard(BACKWARD, 0.05f);
+		CameraObject.ProcessKeyboard(BACKWARD, deltaTime);
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		CameraObject.ProcessKeyboard(LEFT, 0.05f);
+		CameraObject.ProcessKeyboard(LEFT, deltaTime);
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		CameraObject.ProcessKeyboard(RIGHT, 0.05f);
+		CameraObject.ProcessKeyboard(RIGHT, deltaTime);
 	}
 }
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-	std::cout << "mouse call" << '\n';
 	float xpos = (float)xposIn;
 	float ypos = (float)yposIn;
 
@@ -81,6 +84,9 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
 	float xOffset = xpos - lastX;
 	float yOffset = lastY - ypos;
+
+	lastX = xpos;
+	lastY = ypos;
 
 	CameraObject.ProcessMouse(xOffset, yOffset);
 
@@ -288,6 +294,12 @@ int main(int argc, char** argv)
 
 	while (!glfwWindowShouldClose(window))
 	{	
+		float currentFrame = static_cast<float>(glfwGetTime());
+		dT = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		std::cout << 1 / dT << '\n';
+
 		// Input
 		process_input(window);
 		
@@ -316,7 +328,7 @@ int main(int argc, char** argv)
 		model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 
-		camera_move(window);
+		camera_move(window, dT);
 		
 		glfwSetCursorPosCallback(window, mouse_callback);
 		glfwSetScrollCallback(window, scroll_callback);
