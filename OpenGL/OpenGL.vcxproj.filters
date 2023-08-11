@@ -886,7 +886,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\ObjectFragment.shader" />
+    <None Include="res\shaders\ObjectFragment.glsl" />
     <None Include="glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -1295,9 +1295,9 @@
     <None Include="glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="res\shaders\ObjectVertex.shader" />
-    <None Include="res\shaders\LightFragment.shader" />
-    <None Include="res\shaders\LightVertex.shader" />
+    <None Include="res\shaders\ObjectVertex.glsl" />
+    <None Include="res\shaders\LightFragment.glsl" />
+    <None Include="res\shaders\LightVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\sotrue.jpg">

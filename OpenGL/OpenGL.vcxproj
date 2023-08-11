@@ -564,10 +564,10 @@
     <None Include="glm\gtx\vector_angle.inl" />
     <None Include="glm\gtx\vector_query.inl" />
     <None Include="glm\gtx\wrap.inl" />
-    <None Include="res\shaders\LightFragment.shader" />
-    <None Include="res\shaders\LightVertex.shader" />
-    <None Include="res\shaders\ObjectFragment.shader" />
-    <None Include="res\shaders\ObjectVertex.shader" />
+    <None Include="res\shaders\LightFragment.glsl" />
+    <None Include="res\shaders\LightVertex.glsl" />
+    <None Include="res\shaders\ObjectFragment.glsl" />
+    <None Include="res\shaders\ObjectVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\awesomeface.png" />
