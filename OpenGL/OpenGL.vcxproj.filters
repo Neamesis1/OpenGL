@@ -1309,5 +1309,11 @@
     <Image Include="res\textures\good_container.JPG">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\WoodSteelContainer.JPG">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\WoodSteelContainer_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

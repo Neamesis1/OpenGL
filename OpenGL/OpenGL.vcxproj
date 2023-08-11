@@ -573,6 +573,8 @@
     <Image Include="res\textures\awesomeface.png" />
     <Image Include="res\textures\good_container.JPG" />
     <Image Include="res\textures\sotrue.jpg" />
+    <Image Include="res\textures\WoodSteelContainer.JPG" />
+    <Image Include="res\textures\WoodSteelContainer_specular.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
