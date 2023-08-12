@@ -108,6 +108,45 @@ void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 	CameraObject.ProcessMouseScroll((float)yOffset);
 }
 
+unsigned int loadTexture(const char* path)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 4);
+	if (data)
+	{
+		GLenum format = GL_RGBA;
+		if (nrChannels == 1)
+			format = GL_RED;
+		else if (nrChannels == 3)
+			format = GL_RGB;
+		else if (nrChannels == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+
+		std::cout << "Image at: " << path << " has been successfully loaded\n";
+	}
+	else
+	{
+		std::cout << "Failed to load image at: " << path << " failure reason: " << stbi_failure_reason() << '\n';
+		stbi_image_free(data);
+	}
+
+	return textureID;
+}
+
 
 int main(int argc, char** argv)
 {
@@ -192,30 +231,14 @@ int main(int argc, char** argv)
 	unsigned int VBO;
 	unsigned int VAO;
 	unsigned int lightVAO;
-	unsigned int diffuseMap;
-	unsigned int specularMap;
 
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
 	glGenVertexArrays(1, &lightVAO);
 	// glGenBuffers(1, &EBO);
-	glGenTextures(1, &diffuseMap);
-	glGenTextures(1, &specularMap);
 
 	// Binding data for the colored cube
 	glBindVertexArray(VAO);
-
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glBindTexture(GL_TEXTURE_2D, specularMap);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -250,45 +273,14 @@ int main(int argc, char** argv)
 
 	lightingShader.use();
 
-	// -----Loading and Binding Diffuse Map-----
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
+	// Loading diffuse map
+	unsigned int diffuseMap = loadTexture("res/textures/WoodSteelContainer.JPG");
 
-	// Loading texture
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load("res/textures/WoodSteelContainer.JPG", &width, &height, &nrChannels, 4);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		std::cout << "Texture loaded successfully" << '\n';
-	}
-	else
-	{
-		std::cout << "Failed to load texture: " << stbi_failure_reason() << '\n';
-	}
+	// Loading specular map
+	unsigned int specularMap = loadTexture("res/textures/lighting_maps_specular_color.png");
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-
-	// -----Loading and Binding Specular Map-----
-	glBindTexture(GL_TEXTURE_2D, specularMap);
-
-	// Loading texture
-	int width1, height1, nrChannels1;
-	unsigned char* data1 = stbi_load("res/textures/WoodSteelContainer.JPG", &width1, &height1, &nrChannels1, 4);
-	if (data1)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data1);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		std::cout << "Texture loaded successfully" << '\n';
-	}
-	else
-	{
-		std::cout << "Failed to load texture: " << stbi_failure_reason() << '\n';
-	}
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, specularMap);
+	// Loading emission map
+	unsigned int emissionMap = loadTexture("res/textures/matrix.jpg");
 	
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
@@ -358,13 +350,18 @@ int main(int argc, char** argv)
 
 		objectShader.setInt("material.specular", 1);
 
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emissionMap);
+
+		objectShader.setInt("material.emission", 2);
+
 		glm::vec3 lightColor(1.0f);
 		//lightColor.x = sin(glfwGetTime() * 2.0f);
 		//lightColor.y = sin(glfwGetTime() * 0.7f);
 		//lightColor.z = sin(glfwGetTime() * 1.3f);
 
-		glm::vec3 ambient = lightColor * glm::vec3(0.2f);
-		glm::vec3 diffuse = lightColor * glm::vec3(0.5f);
+		glm::vec3 ambient = lightColor * glm::vec3(0.15f);
+		glm::vec3 diffuse = lightColor * glm::vec3(0.8f);
 
 		objectShader.setVec3("light.ambient", ambient);
 		objectShader.setVec3("light.diffuse", diffuse); // darken diffuse light a bit
