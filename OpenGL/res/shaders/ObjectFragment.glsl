@@ -41,6 +41,8 @@ struct SpotLight
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    sampler2D projection_image;
 };
 
 out vec4 FragColor;
@@ -107,6 +109,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
+    float projection_intensity = 0.5f;
+    vec3 projection = projection_intensity * vec3(texture(light.projection_image, TexCoords));
+    
     vec3 lightDir = normalize(light.position - FragPos);
 
     // Ambient component
@@ -114,7 +119,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
     // Diffuse component
     float diff = max(dot(normal, lightDir), 0.0f);
-    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
+    vec3 diffuse = light.diffuse * diff * (vec3(texture(material.diffuse, TexCoords)) + projection);
 
     // Specular component
     vec3 reflectDir = reflect(-lightDir, normal);

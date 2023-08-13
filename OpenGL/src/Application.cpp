@@ -16,6 +16,11 @@
 
 #include <Windows.h>
 
+#include <assimp/material.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 int screen_width = 800;
 int screen_height = 600;
 
@@ -293,6 +298,9 @@ int main(int argc, char** argv)
 
 	// Loading specular map
 	unsigned int specularMap = loadTexture("res/textures/WoodSteelContainer_specular.png");
+
+	// loading projection image
+	unsigned int projectMap = loadTexture("res/textures/sotrue.jpg");
 	
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
@@ -365,6 +373,11 @@ int main(int argc, char** argv)
 		glBindTexture(GL_TEXTURE_2D, specularMap);
 
 		objectShader.setInt("material.specular", 1);
+
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, projectMap);
+
+		objectShader.setInt("spotLight.projection_image", 2);
 
 		glm::vec3 lightColor(1.0f);
 		//lightColor.x = sin(glfwGetTime() * 2.0f);
