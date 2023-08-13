@@ -572,7 +572,7 @@
   <ItemGroup>
     <Image Include="res\textures\good_container.JPG" />
     <Image Include="res\textures\lighting_maps_specular_color.png" />
-    <Image Include="res\textures\matrix.jpg" />
+    <Image Include="res\textures\matrix_code.jpg" />
     <Image Include="res\textures\sotrue.jpg" />
     <Image Include="res\textures\WoodSteelContainer.JPG" />
     <Image Include="res\textures\WoodSteelContainer_specular.png" />
