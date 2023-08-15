@@ -568,18 +568,30 @@
     <None Include="glm\gtx\vector_angle.inl" />
     <None Include="glm\gtx\vector_query.inl" />
     <None Include="glm\gtx\wrap.inl" />
+    <None Include="res\3D_Models\backpack\backpack.mtl" />
     <None Include="res\shaders\LightFragment.glsl" />
     <None Include="res\shaders\LightVertex.glsl" />
     <None Include="res\shaders\ObjectFragment.glsl" />
     <None Include="res\shaders\ObjectVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\3D_Models\backpack\ao.jpg" />
+    <Image Include="res\3D_Models\backpack\diffuse.jpg" />
+    <Image Include="res\3D_Models\backpack\normal.png" />
+    <Image Include="res\3D_Models\backpack\roughness.jpg" />
+    <Image Include="res\3D_Models\backpack\specular.jpg" />
     <Image Include="res\textures\good_container.JPG" />
     <Image Include="res\textures\lighting_maps_specular_color.png" />
     <Image Include="res\textures\matrix_code.jpg" />
     <Image Include="res\textures\sotrue.jpg" />
     <Image Include="res\textures\WoodSteelContainer.JPG" />
     <Image Include="res\textures\WoodSteelContainer_specular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\3D_Models\backpack\backpack.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\3D_Models\backpack\source_attribution.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

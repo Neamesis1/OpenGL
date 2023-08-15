@@ -1310,6 +1310,7 @@
     <None Include="res\shaders\ObjectVertex.glsl" />
     <None Include="res\shaders\LightFragment.glsl" />
     <None Include="res\shaders\LightVertex.glsl" />
+    <None Include="res\3D_Models\backpack\backpack.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\sotrue.jpg">
@@ -1330,5 +1331,26 @@
     <Image Include="res\textures\matrix_code.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\3D_Models\backpack\ao.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\3D_Models\backpack\diffuse.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\3D_Models\backpack\normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\3D_Models\backpack\roughness.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\3D_Models\backpack\specular.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\3D_Models\backpack\backpack.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\3D_Models\backpack\source_attribution.txt" />
   </ItemGroup>
 </Project>
