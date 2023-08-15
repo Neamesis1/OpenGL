@@ -4,16 +4,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
 #include "Camera.h"
+#include "Model.h"
 
+#define NOMINMAX
 #include <Windows.h>
 
 #include <assimp/material.h>
@@ -113,45 +112,6 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 {
 	CameraObject.ProcessMouseScroll((float)yOffset);
-}
-
-unsigned int loadTexture(const char* path)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 4);
-	if (data)
-	{
-		GLenum format = GL_RGBA;
-		if (nrChannels == 1)
-			format = GL_RED;
-		else if (nrChannels == 3)
-			format = GL_RGB;
-		else if (nrChannels == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-
-		std::cout << "Image at: " << path << " has been successfully loaded\n";
-	}
-	else
-	{
-		std::cout << "Failed to load image at: " << path << " failure reason: " << stbi_failure_reason() << '\n';
-		stbi_image_free(data);
-	}
-
-	return textureID;
 }
 
 
@@ -293,14 +253,18 @@ int main(int argc, char** argv)
 
 	lightingShader.use();
 
+	char path_thing[10] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '10'};
+
+	Model A(path_thing);
+
 	// Loading diffuse map
-	unsigned int diffuseMap = loadTexture("res/textures/WoodSteelContainer.JPG");
+	unsigned int diffuseMap = A.TextureFromFile("textures/WoodSteelContainer.JPG");
 
 	// Loading specular map
-	unsigned int specularMap = loadTexture("res/textures/WoodSteelContainer_specular.png");
+	unsigned int specularMap = A.TextureFromFile("textures/WoodSteelContainer_specular.png");
 
 	// loading projection image
-	unsigned int projectMap = loadTexture("res/textures/sotrue.jpg");
+	unsigned int projectMap = A.TextureFromFile("textures/sotrue.jpg");
 	
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
