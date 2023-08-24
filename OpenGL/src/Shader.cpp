@@ -77,6 +77,7 @@ void Shader::compile_link_shader_and_check_success()
 	}
 	else { std::cout << "SHADER " << fragment << " COMPILED SUCCESSFULLY" << '\n'; }
 
+	// Shader program linking and checking success
 	ID = glCreateProgram();
 	glAttachShader(ID, vertex);
 	glAttachShader(ID, fragment);
@@ -127,4 +128,9 @@ void Shader::setVec3(const std::string& name, float x, float y, float z)
 void Shader::setVec3(const std::string& name, glm::vec3 value)
 {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+
+void Shader::setMat4(const std::string& name, glm::mat4 value)
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }

@@ -13,14 +13,14 @@
 class Model
 {
 public:
-	Model(char* path)
+	Model(std::string const& path)
 	{
 		loadModel(path);
 	}
 
 	void Draw(Shader& shader);
 
-	unsigned int TextureFromFile(std::string path, std::string directory = "res/");
+	unsigned int TextureFromFile(std::string path, std::string directory = "");
 
 private:
 	// Model data

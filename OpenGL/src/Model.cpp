@@ -5,11 +5,24 @@
 
 unsigned int Model::TextureFromFile(std::string path, std::string directory)
 {
+	stbi_set_flip_vertically_on_load(true);
+
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 
+	std::string texture_path;
+
+	if (directory != (std::string)"")
+	{
+		texture_path = (directory + "/" + path);
+	}
+	else
+	{
+		texture_path = path;
+	}
+
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load((directory + path).c_str(), &width, &height, &nrChannels, 4);
+	unsigned char* data = stbi_load(texture_path.c_str(), &width, &height, &nrChannels, 4);
 	if (data)
 	{
 		GLenum format = GL_RGBA;
@@ -31,11 +44,11 @@ unsigned int Model::TextureFromFile(std::string path, std::string directory)
 
 		stbi_image_free(data);
 
-		std::cout << "Image at: " << directory + path << " has been successfully loaded\n";
+		std::cout << "Image at: " << texture_path << " has been successfully loaded\n";
 	}
 	else
 	{
-		std::cout << "Failed to load image at: " << directory + path << " failure reason: " << stbi_failure_reason() << '\n';
+		std::cout << "Failed to load image at: " << texture_path << " failure reason: " << stbi_failure_reason() << '\n';
 		stbi_image_free(data);
 	}
 
@@ -132,13 +145,13 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* material, aiTexture
 		aiString str;
 		material->GetTexture(type, i, &str);
 		bool skip = false;
-		for (unsigned int j; j < textures_loaded.size(); j++)
+		for (unsigned int j = 0; j < textures_loaded.size(); j++)
 		{
 			// checking if texture hasn't already been loaded
 			if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(textures_loaded[j]);
-				skip == true;
+				skip = true;
 				break;
 			}
 		}
@@ -168,19 +181,26 @@ void Model::Draw(Shader& shader)
 
 void Model::loadModel(std::string path)
 {
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	if (path != (std::string)"")
 	{
-		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << '\n';
-		return;
+		Assimp::Importer importer;
+		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << '\n';
+			return;
+		}
+		else
+		{
+			std::cout << "Model at path: " << path << " loaded successfully!\n";
+		}
+
+		directory = path.substr(0, path.find_last_of('/'));
+		processNode(scene->mRootNode, scene);
 	}
 	else
 	{
-		std::cout << "Model at path: " << path << " loaded successfully!\n";
+		std::cout << "dummy model object created\n";
 	}
-
-	directory = path.substr(0, path.find_last_of('/'));
-	processNode(scene->mRootNode, scene);
 }

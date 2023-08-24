@@ -898,7 +898,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\ObjectFragment.glsl" />
     <None Include="glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -1307,10 +1306,16 @@
     <None Include="glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="res\shaders\ObjectVertex.glsl" />
-    <None Include="res\shaders\LightFragment.glsl" />
-    <None Include="res\shaders\LightVertex.glsl" />
     <None Include="res\3D_Models\backpack\backpack.mtl" />
+    <None Include="res\3D_Models\donut\Donut.blend" />
+    <None Include="res\shaders\LightingShaders\LightFragment.glsl" />
+    <None Include="res\shaders\LightingShaders\LightVertex.glsl" />
+    <None Include="res\shaders\LightingShaders\ObjectFragment.glsl" />
+    <None Include="res\shaders\LightingShaders\ObjectVertex.glsl" />
+    <None Include="res\shaders\TestingShaders\TestFragment.glsl" />
+    <None Include="res\shaders\TestingShaders\TestVertex.glsl" />
+    <None Include="res\shaders\TestingShaders\QuadFragment.glsl" />
+    <None Include="res\shaders\TestingShaders\QuadVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\sotrue.jpg">
@@ -1346,9 +1351,21 @@
     <Image Include="res\3D_Models\backpack\specular.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="res\3D_Models\backpack\backpack.obj" />
+    <Image Include="res\3D_Models\donut\Donut base.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\marble_texture.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\metal_texture.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\blending_transparent_window.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\3D_Models\backpack\source_attribution.txt" />

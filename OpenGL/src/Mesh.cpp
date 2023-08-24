@@ -3,13 +3,15 @@
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
 	: vertices(vertices), indices(indices), textures(textures)
 {
-
+	setUpMesh();
 }
 
 void Mesh::Draw(Shader& shader)
 {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
+
+	shader.use();
 	
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
@@ -18,8 +20,16 @@ void Mesh::Draw(Shader& shader)
 		// retrieve texture number (the N in diffuse_textureN)
 		std::string number;
 		std::string name = textures[i].type;
-		if (name == "diffuse_texture") { number = std::to_string(diffuseNr++); }
-		else if (name == "specular_texture") { number = std::to_string(specularNr++); }
+		if (name == "texture_diffuse") 
+		{ 
+			number = std::to_string(diffuseNr++); 
+		}
+		else if (name == "texture_specular") 
+		{
+			number = std::to_string(specularNr++); 
+		}
+
+		//std::cout << name + number << '\n';
 
 		shader.setInt(("material." + name + number).c_str(), i);
 		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
@@ -32,7 +42,7 @@ void Mesh::Draw(Shader& shader)
 	glBindVertexArray(0);
 }
 
-void Mesh::setupMesh()
+void Mesh::setUpMesh()
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);

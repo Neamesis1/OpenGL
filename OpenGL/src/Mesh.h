@@ -38,5 +38,5 @@ private:
 	// Render data
 	unsigned int VAO, VBO, EBO;
 
-	void setupMesh();
+	void setUpMesh();
 };
