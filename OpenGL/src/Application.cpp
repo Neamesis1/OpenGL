@@ -196,14 +196,14 @@ int main(int argc, char** argv)
 	// Create framebuffer
 	unsigned int FBO;
 	glGenFramebuffers(1, &FBO); // Try using glGenBuffers() instead
-	glBindBuffer(GL_FRAMEBUFFER, FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
 	// Generate texture attachment and attach it
 	unsigned int colorBufferTexture;
 	glGenTextures(1, &colorBufferTexture);
 	glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -379,11 +379,11 @@ int main(int argc, char** argv)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
 
 	// Vertex positions
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	// Vertex texture coords
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 	// Creating and compiling shaders
@@ -517,14 +517,12 @@ int main(int argc, char** argv)
 
 		// Drawing the texture onto a quad
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glDisable(GL_DEPTH_TEST);
-
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glDisable(GL_DEPTH_TEST);
 
 		glBindVertexArray(quadVAO);
 		QuadShader.use();
-		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
 		QuadShader.setInt("screenTexture", 0);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
