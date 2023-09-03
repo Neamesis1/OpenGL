@@ -1316,6 +1316,8 @@
     <None Include="res\shaders\TestingShaders\TestVertex.glsl" />
     <None Include="res\shaders\TestingShaders\QuadFragment.glsl" />
     <None Include="res\shaders\TestingShaders\QuadVertex.glsl" />
+    <None Include="res\shaders\TestingShaders\SkyboxVertex.glsl" />
+    <None Include="res\shaders\TestingShaders\SkyboxFragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\sotrue.jpg">
@@ -1364,6 +1366,24 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\blending_transparent_window.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\CubeMapTexture\skybox\back.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\CubeMapTexture\skybox\bottom.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\CubeMapTexture\skybox\front.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\CubeMapTexture\skybox\left.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\CubeMapTexture\skybox\right.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\CubeMapTexture\skybox\top.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

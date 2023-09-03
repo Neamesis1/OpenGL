@@ -576,6 +576,8 @@
     <None Include="res\shaders\LightingShaders\ObjectVertex.glsl" />
     <None Include="res\shaders\TestingShaders\QuadFragment.glsl" />
     <None Include="res\shaders\TestingShaders\QuadVertex.glsl" />
+    <None Include="res\shaders\TestingShaders\SkyboxFragment.glsl" />
+    <None Include="res\shaders\TestingShaders\SkyboxVertex.glsl" />
     <None Include="res\shaders\TestingShaders\TestFragment.glsl" />
     <None Include="res\shaders\TestingShaders\TestVertex.glsl" />
   </ItemGroup>
@@ -587,6 +589,12 @@
     <Image Include="res\3D_Models\backpack\specular.jpg" />
     <Image Include="res\3D_Models\donut\Donut base.png" />
     <Image Include="res\textures\blending_transparent_window.png" />
+    <Image Include="res\textures\CubeMapTexture\skybox\back.jpg" />
+    <Image Include="res\textures\CubeMapTexture\skybox\bottom.jpg" />
+    <Image Include="res\textures\CubeMapTexture\skybox\front.jpg" />
+    <Image Include="res\textures\CubeMapTexture\skybox\left.jpg" />
+    <Image Include="res\textures\CubeMapTexture\skybox\right.jpg" />
+    <Image Include="res\textures\CubeMapTexture\skybox\top.jpg" />
     <Image Include="res\textures\good_container.JPG" />
     <Image Include="res\textures\grass.png" />
     <Image Include="res\textures\lighting_maps_specular_color.png" />
